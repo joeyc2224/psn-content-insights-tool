@@ -22,11 +22,11 @@ npm run dev
 
 I built a lightweight internal data dashboard that allows non-technical users to explore how PSN content is performing, without needing to rely on a full BI tool.
 
-From the outset, I kept the brief in mind around creating a purpose-built interface that answers a small number of common questions quickly. I experimented with different layouts, charts, and metrics to find a balance between useful insight and simplicity, focusing on clarity rather than packing in as much data as possible.
+From the outset, I kept the brief in mind around creating a purpose-built interface that answers a number of common questions quickly. I experimented with different layouts, charts, and metrics to find a balance between useful insight and simplicity, focusing on clarity rather than packing in as much data as possible.
 
 The application is split into two main views:
-- **Insights**, which provides a high-level overview of performance using key metrics and visualisations to highlight trends
-- **Data**, which exposes a more detailed, sortable table of individual videos for users who want to dig into the raw numbers
+- **Insights** - provides a high-level overview of performance using key metrics and visualisations to highlight trends
+- **Data** - exposes a more detailed, sortable table of individual videos for users who want to dig into the raw numbers
 
 Key features include:
 - High-level KPI metrics to give an immediate snapshot of overall performance ([`KpiBar.tsx`](frontend/src/components/KpiBar.tsx))
@@ -38,7 +38,7 @@ Key features include:
 
 The interactions are intentionally familiar, mirroring what a Looker Studio user might expect, while keeping the interface focused and easy to use. 
 
-I also made a deliberate decision around how date filtering works. In addition to filtering by channel and activity date, the dashboard includes a “published in range” option, which allows editors to focus specifically on content released during a selected period rather than all content generating views at that time. This enables different types of insight, such as evaluating the performance of recently published videos versus ongoing long-tail content.
+I also made a deliberate decision around how date filtering works. In addition to filtering by channel and activity date, the dashboard includes a 'published in range' option, which allows editors to focus specifically on content released during a selected period rather than all content generating views at that time. This enables different types of insight, such as evaluating the performance of recently published videos versus ongoing long-tail content.
 
 The Insights page is structured in a modular way, with self-contained components, so additional charts or metrics can be added over time without disrupting the existing layout. All filters and breakdowns are driven directly from the data in the database rather than hard-coded values, meaning new channels or video types will automatically appear without requiring additional development work.
 
@@ -58,7 +58,7 @@ I used OpenAI Codex via the command line during development, which allowed it to
 
 I used Codex as a productivity aid rather than a replacement for writing and reasoning about the code. All generated code was reviewed and adapted manually, and nothing was used without fully understanding how it worked. All content and UI decisions were made by me over several iterations, with Codex used to support experimentation rather than drive the solution.
 
-## Things I’d improve with more time
+## Things I would improve with more time
 In a future iteration of the dashboard, I’d like to add more context to the views-over-time chart by plotting when videos were published, with interactive hover states to show which pieces of content may have driven spikes in views.
 
 With more time, I would focus on improving the depth and context of the insights available in the dashboard. In particular, I would add the ability to compare performance across different time periods (for example, against the previous 30 days) and provide clearer indicators of change, such as percentage differences on key metrics.
