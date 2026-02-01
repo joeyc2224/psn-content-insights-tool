@@ -36,9 +36,9 @@ Key features include:
 - Filters for channel, video type, and date range, with sensible last-30-days defaults applied ([`layouts/AppLayout.tsx`](frontend/src/layouts/AppLayout.tsx))
 - Clickable table rows that open a modal with more detailed video information, including daily views and a direct link to the video on YouTube ([`VideoModal.tsx`](frontend/src/components/VideoModal.tsx))
 
-The interactions are intentionally familiar, mirroring what a Looker Studio user might expect, while keeping the interface focused and easy to use.
+The interactions are intentionally familiar, mirroring what a Looker Studio user might expect, while keeping the interface focused and easy to use. 
 
-I also made a deliberate decision around how date filtering works. In addition to filtering by activity date, the dashboard includes a “published in range” option, which allows editors to focus specifically on content released during a selected period rather than all content generating views at that time. This enables different types of insight, such as evaluating the performance of recently published videos versus ongoing long-tail content.
+I also made a deliberate decision around how date filtering works. In addition to filtering by channel and activity date, the dashboard includes a “published in range” option, which allows editors to focus specifically on content released during a selected period rather than all content generating views at that time. This enables different types of insight, such as evaluating the performance of recently published videos versus ongoing long-tail content.
 
 The Insights page is structured in a modular way, with self-contained components, so additional charts or metrics can be added over time without disrupting the existing layout. All filters and breakdowns are driven directly from the data in the database rather than hard-coded values, meaning new channels or video types will automatically appear without requiring additional development work.
 
