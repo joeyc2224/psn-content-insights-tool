@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { db, queries, toNull } from '../lib/db.js';
+import { isPublishedOnly } from '../lib/sqlFilters.js';
 
 const router = Router();
 
@@ -20,10 +21,18 @@ router.get('/views-split', (req, res) => {
     const params = {};
     const filters = [];
 
-    const account = toNull(req.query.account);
-    if (account) {
-        filters.push('AND p.account_name = :account');
-        params.account = account;
+    const accounts = toNull(req.query.accounts)
+        ? req.query.accounts
+              .split(',')
+              .map((value) => value.trim())
+              .filter(Boolean)
+        : [];
+    if (accounts.length > 0) {
+        const placeholders = accounts.map((_, index) => `:account_${index}`);
+        filters.push(`AND p.account_name IN (${placeholders.join(', ')})`);
+        accounts.forEach((value, index) => {
+            params[`account_${index}`] = value;
+        });
     }
 
     const videoType = toNull(req.query.video_type);
@@ -42,6 +51,39 @@ router.get('/views-split', (req, res) => {
     if (endDate) {
         filters.push('AND DATE(s.data_date) <= DATE(:end_date)');
         params.end_date = endDate;
+    }
+
+    const publishedOnly = isPublishedOnly(toNull(req.query.published_only));
+    if (publishedOnly) {
+        filters.push('AND DATE(p.published_at_date) >= DATE(:start_date)');
+        filters.push('AND DATE(p.published_at_date) <= DATE(:end_date)');
+    }
+
+    const includeAll = toNull(req.query.include_all) === 'true';
+    if (groupByKey === 'account' && includeAll) {
+        const sql = `
+WITH accounts AS (
+  SELECT DISTINCT TRIM(account_name) AS label
+  FROM posts
+  WHERE account_name IS NOT NULL AND TRIM(account_name) <> ''
+)
+SELECT
+  a.label AS label,
+  COALESCE(SUM(s.views), 0) AS views
+FROM accounts a
+LEFT JOIN posts p ON TRIM(p.account_name) = a.label
+LEFT JOIN poststats s ON s.video_id = p.video_id
+  ${startDate ? 'AND DATE(s.data_date) >= DATE(:start_date)' : ''}
+  ${endDate ? 'AND DATE(s.data_date) <= DATE(:end_date)' : ''}
+WHERE 1=1
+  ${publishedOnly ? 'AND DATE(p.published_at_date) >= DATE(:start_date)' : ''}
+  ${publishedOnly ? 'AND DATE(p.published_at_date) <= DATE(:end_date)' : ''}
+GROUP BY a.label
+ORDER BY views DESC;
+`;
+        const rows = db.prepare(sql).all(params);
+        res.json(rows);
+        return;
     }
 
     const sql = queries.views_split

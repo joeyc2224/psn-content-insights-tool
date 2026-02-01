@@ -2,6 +2,7 @@ import Database from 'better-sqlite3';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { ensureDatabase } from './bootstrapDb.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -9,6 +10,8 @@ const __dirname = path.dirname(__filename);
 const dbPath = process.env.DB_PATH
     ? path.resolve(process.env.DB_PATH)
     : path.join(__dirname, '..', '..', 'data', 'psn.db');
+
+ensureDatabase(dbPath); // Make sure the database exists before trying to open it
 export const db = new Database(dbPath, { readonly: true });
 
 const sqlDir = path.join(__dirname, '..', 'sql');

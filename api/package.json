@@ -9,6 +9,7 @@
   "type": "module",
   "dependencies": {
     "better-sqlite3": "^12.6.2",
+    "csv-parse": "^6.1.0",
     "express": "^5.2.1"
   },
   "devDependencies": {

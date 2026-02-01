@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { db, queries, toNull } from '../lib/db.js';
+import { isPublishedOnly } from '../lib/sqlFilters.js';
 
 const router = Router();
 
@@ -70,6 +71,12 @@ router.get('/views-over-time', (req, res) => {
     if (endDate) {
         filters.push('AND DATE(s.data_date) <= DATE(:end_date)');
         params.end_date = endDate;
+    }
+
+    const publishedOnly = isPublishedOnly(toNull(req.query.published_only));
+    if (publishedOnly) {
+        filters.push('AND DATE(p.published_at_date) >= DATE(:start_date)');
+        filters.push('AND DATE(p.published_at_date) <= DATE(:end_date)');
     }
 
     const sql = buildViewsOverTimeQuery(groupBy);
