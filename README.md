@@ -38,6 +38,8 @@ Key features include:
 
 The interactions are intentionally familiar, mirroring what a Looker Studio user might expect, while keeping the interface focused and easy to use.
 
+I also made a deliberate decision around how date filtering works. In addition to filtering by activity date, the dashboard includes a “published in range” option, which allows editors to focus specifically on content released during a selected period rather than all content generating views at that time. This enables different types of insight, such as evaluating the performance of recently published videos versus ongoing long-tail content.
+
 The Insights page is structured in a modular way, with self-contained components, so additional charts or metrics can be added over time without disrupting the existing layout. All filters and breakdowns are driven directly from the data in the database rather than hard-coded values, meaning new channels or video types will automatically appear without requiring additional development work.
 
 The frontend is built with React and Vite ([`/frontend`](frontend)), with a simple Node.js API ([`/api`](api)) providing the data and running SQL queries against a local SQLite database. The database is created automatically on start-up using the existing SQL schema (see [`bootstrapDb.js`](api/lib/bootstrapDb.js)). 
